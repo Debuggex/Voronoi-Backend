@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -43,5 +45,16 @@ public class AdminController {
     @PostMapping("/v1/addUser")
     public ResponseEntity<BaseResponse<?>> addUser(@RequestBody EditUser user){
         return new ResponseEntity<>(userService.addUser(user),HttpStatus.OK);
+    }
+
+    @PostMapping("/v1/deleteUser")
+    public ResponseEntity<BaseResponse<UserResponse>> deleteUser(@RequestBody GetUser getUser){
+        BaseResponse response = new BaseResponse();
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsers(userService.deleteUser(getUser));
+        response.setResponseBody(userResponse);
+        response.setResponseCode(1);
+        response.setResponseMessage("User Delete Successfully");
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

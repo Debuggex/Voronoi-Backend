@@ -52,6 +52,7 @@ public class UserService implements UserDetailsService {
         user.setIsInternal(editUser.getUser().getIsInternal());
         user.setIsSubscribed(editUser.getUser().getIsSubscribed());
         user.setPassword(new BCryptPasswordEncoder().encode(editUser.getUser().getEmail()));
+        user.setIsAdmin(editUser.getUser().getIsAdmin());
         user.setPlainPassword(editUser.getUser().getPassword());
         userRepository.save(user);
         BaseResponse response = new BaseResponse();
@@ -76,5 +77,11 @@ public class UserService implements UserDetailsService {
         response.setResponseCode(1);
         response.setResponseMessage("Request Proceed Successfully");
         return response;
+    }
+
+    public List<User> deleteUser(GetUser getUser){
+        userRepository.deleteById(Long.valueOf(getUser.getId()));
+        List<User> users = userRepository.findAllByIsAdmin(false);
+        return users;
     }
 }
