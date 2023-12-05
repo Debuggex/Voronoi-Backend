@@ -1,7 +1,13 @@
 package com.voronoi.voronoiworkspace.Entities;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode
 @Getter
@@ -44,14 +50,16 @@ public class User {
     private String plainPassword;
 
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userId")
-//    private List<Set> sets = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "userId")
+    private Set<Images> images = new HashSet<>();
 
 
-//    public User addSet(Set set) {
-//        set.setUserId(this);
-//        this.sets.add(set);
-//        return this;
-//    }
+    public User addSet(Images image) {
+        image.setUserId(this);
+        this.images.add(image);
+        return this;
+    }
 
 }

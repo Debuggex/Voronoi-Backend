@@ -78,6 +78,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 return null;
             }
         } catch (IOException e) {
+            BaseResponse baseResponse = new BaseResponse();
+            baseResponse.setResponseCode(0);
+            baseResponse.setResponseBody(null);
+            baseResponse.setResponseMessage("Invalid Credentials");
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(500);
+            try {
+                new ObjectMapper().writeValue(response.getOutputStream(),baseResponse);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             return null;
         }
 
