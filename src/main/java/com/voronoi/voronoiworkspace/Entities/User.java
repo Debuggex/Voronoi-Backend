@@ -37,17 +37,26 @@ public class User {
     @Column(name = "Password")
     private String password;
 
-    @Column(name = "isSubscribed", length = 100)
-    private Boolean isSubscribed = false;
-
-    @Column(name = "isInternal")
-    private Boolean isInternal = false;
-
     @Column(name = "isAdmin")
     private Boolean isAdmin = false;
 
     @Column(name = "PlainPassword")
     private String plainPassword;
+
+    @Column(name = "RegistrationDate")
+    private String registrationDate;
+
+    @Column(name = "NextPaymentDue")
+    private String nextPaymentDue;
+
+    @Column(name = "SubscriptionPlan")
+    private String subscriptionPlan;
+
+    @Column(name = "Status")
+    private String status;
+
+    @Column(name = "UserType")
+    private String userType;
 
 
 

@@ -25,6 +25,15 @@ public class Images {
     @Column(name = "Name")
     private String name;
 
+    @Column(name = "Action")
+    private String action;
+
+    @Column(name = "ActionDate")
+    private String actionDate;
+
+    @Column(name = "FileType")
+    private String fileType;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "userId")

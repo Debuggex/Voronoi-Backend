@@ -32,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -137,6 +139,13 @@ public class GoogleDriveService {
             Images images = new Images();
             images.setFileId(uploadFile.getId());
             images.setName(fileMetadata.getName());
+            images.setFileType(fileMetadata.getMimeType());
+            images.setAction("Imported");
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+            // Format the current date and time using the formatter
+            String formattedDateTime = now.format(formatter);
+            images.setActionDate(formattedDateTime);
             Images savedImage = imageRepository.save(images);
             User updatedUser = user.addSet(savedImage);
             userRepository.save(updatedUser);

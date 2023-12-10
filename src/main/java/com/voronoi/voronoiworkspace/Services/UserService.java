@@ -49,8 +49,6 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(Long.valueOf(editUser.getUser().getId())).get();
         user.setEmail(editUser.getUser().getEmail());
         user.setFirstName(editUser.getUser().getFirstName());
-        user.setIsInternal(editUser.getUser().getIsInternal());
-        user.setIsSubscribed(editUser.getUser().getIsSubscribed());
         user.setPassword(new BCryptPasswordEncoder().encode(editUser.getUser().getEmail()));
         user.setIsAdmin(editUser.getUser().getIsAdmin());
         user.setPlainPassword(editUser.getUser().getPassword());

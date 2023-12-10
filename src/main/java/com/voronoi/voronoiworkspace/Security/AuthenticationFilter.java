@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -101,10 +102,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authResult.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        String accessToken = JWT.create().withSubject(user.getUsername()).withIssuer(request.getRequestURI()).withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+            Date expirationTime = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
+            String accessToken = JWT.create().withSubject(user.getUsername()).withIssuer(request.getRequestURI()).withExpiresAt(expirationTime).withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-        String refreshToken = JWT.create().withSubject(user.getUsername()).withIssuer(request.getRequestURI()).withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+        String refreshToken = JWT.create().withSubject(user.getUsername()).withIssuer(request.getRequestURI()).withExpiresAt(expirationTime).withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 //        response.setHeader("accessToken",accessToken);
 //        response.setHeader("refreshToken",refreshToken);
