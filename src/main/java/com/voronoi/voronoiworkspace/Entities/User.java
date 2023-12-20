@@ -58,6 +58,9 @@ public class User {
     @Column(name = "UserType")
     private String userType;
 
+    @Column(name = "Role")
+    private String role;
+
 
 
     @JsonManagedReference

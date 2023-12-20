@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +36,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User with this email does not exist");
         }else{
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+            authorities.add(new SimpleGrantedAuthority(user.get().getRole()));
 
             return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(), authorities);
         }
@@ -42,7 +44,8 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public List<User> getAllUsers(){
-        return userRepository.findAllByIsAdmin(false);
+        List<User> users = userRepository.findUser();
+        return users;
     }
 
     public BaseResponse editUser(EditUser editUser){
@@ -70,6 +73,22 @@ public class UserService implements UserDetailsService {
     @Transactional
     public BaseResponse addUser(EditUser user){
         BaseResponse<User> response = new BaseResponse<>();
+        if (user.getUser().getRole().equals("ADMIN") || user.getUser().getRole().equals("INTERNAL") ){
+            user.getUser().setUserType("Employers");
+            user.getUser().setSubscriptionPlan("Free");
+        }else{
+            user.getUser().setSubscriptionPlan("Premium");
+            user.getUser().setStatus("Subscribed");
+            user.getUser().setUserType("External Users");
+        }
+        user.getUser().setStatus("UnSubscribed");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+
+        // Format the current date and time using the formatter
+        String formattedDateTime = now.format(formatter);
+        user.getUser().setRegistrationDate(formattedDateTime);
+        user.getUser().setNextPaymentDue(formattedDateTime);
         user.getUser().setPassword(new BCryptPasswordEncoder().encode(user.getUser().getPassword()));
         User saved = userRepository.save(user.getUser());
         response.setResponseCode(1);
@@ -79,7 +98,7 @@ public class UserService implements UserDetailsService {
 
     public List<User> deleteUser(GetUser getUser){
         userRepository.deleteById(Long.valueOf(getUser.getId()));
-        List<User> users = userRepository.findAllByIsAdmin(false);
+        List<User> users = userRepository.findUser();
         return users;
     }
 }

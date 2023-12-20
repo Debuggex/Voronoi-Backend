@@ -31,14 +31,17 @@ public class UserBootstraping implements CommandLineRunner {
             if (j==1){
                 user.setSubscriptionPlan("Free");
                 user.setStatus("Subscribed");
+                user.setRole("ADMIN");
             }
             if (j==2){
                 user.setSubscriptionPlan("Premium");
                 user.setStatus("UnSubscribed");
+                user.setRole("INTERNAL");
             }
             if (j==3){
                 user.setSubscriptionPlan("Platinum");
                 user.setStatus("Paused");
+                user.setRole("SUBSCRIBED");
             }
             if (j%2==0){
                 user.setUserType("External Users");
@@ -61,6 +64,7 @@ public class UserBootstraping implements CommandLineRunner {
         User user = new User();
         user.setEmail("the@raajpatel.dev");
         user.setPassword(new BCryptPasswordEncoder().encode("sample1234"));
+        user.setRole("SUPERADMIN");
         user.setIsAdmin(true);
         User u = userRepository.save(user);
     }

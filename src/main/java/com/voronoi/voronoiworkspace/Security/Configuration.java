@@ -58,7 +58,7 @@ public class Configuration {
            authorize.antMatchers("/admin/v1/previewImage/**").permitAll();
         });
         http.authorizeHttpRequests(authorize->{
-            authorize.antMatchers("/admin/**").hasAuthority("ADMIN");
+            authorize.antMatchers("/admin/**").hasAuthority("SUPERADMIN");
         });
 
         http.authorizeHttpRequests(authorize->{
