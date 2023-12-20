@@ -139,7 +139,7 @@ public class GoogleDriveService {
             Images images = new Images();
             images.setFileId(uploadFile.getId());
             images.setName(fileMetadata.getName());
-            images.setFileType(fileMetadata.getMimeType());
+            images.setFileType(file.getContentType());
             images.setAction("Imported");
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
