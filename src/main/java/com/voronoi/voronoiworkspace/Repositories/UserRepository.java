@@ -12,6 +12,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByRole(String role);
 
-    @Query(value = "SELECT DISTINCT u FROM User u WHERE u.role IN ('ADMIN', 'SUBSCRIBED', 'INTERNAL')")
+    @Query(value = "SELECT DISTINCT u FROM User u WHERE u.role IN ('ADMIN', 'EXTERNAL', 'INTERNAL')")
     List<User> findUser();
 }
