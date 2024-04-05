@@ -55,7 +55,8 @@ public class Configuration {
         http.headers().frameOptions().disable();
         http.authorizeHttpRequests(authorize->{
            authorize.antMatchers("/h2-console/**").permitAll();
-           authorize.antMatchers("/admin/v1/previewImage/**").permitAll();
+            authorize.antMatchers("/Callback/**").permitAll();
+            authorize.antMatchers("/admin/v1/previewImage/**").permitAll();
             authorize.antMatchers("/admin/v1/addUser/**").permitAll();
         });
         http.authorizeHttpRequests(authorize->{
