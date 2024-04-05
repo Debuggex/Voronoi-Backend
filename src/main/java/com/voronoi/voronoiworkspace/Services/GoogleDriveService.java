@@ -88,7 +88,7 @@ public class GoogleDriveService {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("https://voronoi-app-05f7dce4836e.herokuapp.com").setCallbackPath("https://voronoi-app.netlify.app/oauth2/callback/google").build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("https://voronoi-app-05f7dce4836e.herokuapp.com").setPort(8888).build();
         Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
         //returns an authorized Credential object.
         return credential;
