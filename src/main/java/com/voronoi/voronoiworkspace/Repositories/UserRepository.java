@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
 
+    User findByRole(String role);
+
     @Query(value = "SELECT DISTINCT u FROM User u WHERE u.role IN ('ADMIN', 'SUBSCRIBED', 'INTERNAL')")
     List<User> findUser();
 }

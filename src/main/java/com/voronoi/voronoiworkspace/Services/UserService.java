@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -73,12 +74,19 @@ public class UserService implements UserDetailsService {
     @Transactional
     public BaseResponse addUser(EditUser user){
         BaseResponse<User> response = new BaseResponse<>();
+        Optional<User> fUser = userRepository.findByEmail(user.getUser().getEmail());
+        if (fUser.isPresent()){
+            response.setResponseCode(0);
+            response.setResponseMessage("User with this email already Exists");
+            return response;
+        }
         if (user.getUser().getRole().equals("ADMIN") || user.getUser().getRole().equals("INTERNAL") ){
             user.getUser().setUserType("Employers");
             user.getUser().setSubscriptionPlan("Free");
         }else{
             user.getUser().setSubscriptionPlan("Premium");
             user.getUser().setStatus("Subscribed");
+            user.getUser().setRole("EXTERNAL");
             user.getUser().setUserType("External Users");
         }
         user.getUser().setStatus("UnSubscribed");

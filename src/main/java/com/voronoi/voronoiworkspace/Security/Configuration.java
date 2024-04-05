@@ -56,8 +56,10 @@ public class Configuration {
         http.authorizeHttpRequests(authorize->{
            authorize.antMatchers("/h2-console/**").permitAll();
            authorize.antMatchers("/admin/v1/previewImage/**").permitAll();
+            authorize.antMatchers("/admin/v1/addUser/**").permitAll();
         });
         http.authorizeHttpRequests(authorize->{
+            authorize.antMatchers("/admin/v1/uploadFile").hasAuthority("INTERNAL");
             authorize.antMatchers("/admin/**").hasAuthority("SUPERADMIN");
         });
 

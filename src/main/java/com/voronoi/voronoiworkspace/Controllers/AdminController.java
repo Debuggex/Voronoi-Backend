@@ -12,6 +12,7 @@ import com.voronoi.voronoiworkspace.Services.GoogleDriveService;
 import com.voronoi.voronoiworkspace.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +56,11 @@ public class AdminController {
 
     @PostMapping("/v1/addUser")
     public ResponseEntity<BaseResponse<?>> addUser(@RequestBody EditUser user){
-        return new ResponseEntity<>(userService.addUser(user),HttpStatus.OK);
+        BaseResponse response = userService.addUser(user);
+        if (response.getResponseCode() == 0){
+            return new ResponseEntity<>(response,HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PostMapping("/v1/deleteUser")
@@ -74,7 +79,7 @@ public class AdminController {
         return new ResponseEntity<>(googleDriveService.getfiles(),HttpStatus.OK);
     }
 
-    @PostMapping("/v1/uploadFile")
+    @PostMapping(value = "/v1/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) throws GeneralSecurityException, IOException {
         return new ResponseEntity<>(googleDriveService.uploadFiles(file, userId),HttpStatus.OK);
     }

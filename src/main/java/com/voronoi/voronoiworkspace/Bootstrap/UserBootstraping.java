@@ -20,52 +20,28 @@ public class UserBootstraping implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        int j = 1;
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setEmail("the@user" + i + ".dev");
-            user.setFirstName("user" + i);
-            user.setPlainPassword("sample1234");
-            user.setPassword(new BCryptPasswordEncoder().encode("sample1234"));
-            user.setIsAdmin(false);
-            if (j==1){
-                user.setSubscriptionPlan("Free");
-                user.setStatus("Subscribed");
-                user.setRole("ADMIN");
-            }
-            if (j==2){
-                user.setSubscriptionPlan("Premium");
-                user.setStatus("UnSubscribed");
-                user.setRole("INTERNAL");
-            }
-            if (j==3){
-                user.setSubscriptionPlan("Platinum");
-                user.setStatus("Paused");
-                user.setRole("SUBSCRIBED");
-            }
-            if (j%2==0){
-                user.setUserType("External Users");
-            }else{
-                user.setUserType("Employers");
-            }
-            j++;
-            if (j==4){
-                j=1;
-            }
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        User user = userRepository.findByRole("SUPERADMIN");
+        if (user != null) return;
+        User user1 = new User();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
-            // Format the current date and time using the formatter
-            String formattedDateTime = now.format(formatter);
-            user.setRegistrationDate(formattedDateTime);
-            user.setNextPaymentDue(formattedDateTime);
-            User u = userRepository.save(user);
-        }
-        User user = new User();
-        user.setEmail("the@raajpatel.dev");
-        user.setPassword(new BCryptPasswordEncoder().encode("sample1234"));
-        user.setRole("SUPERADMIN");
-        user.setIsAdmin(true);
-        User u = userRepository.save(user);
+        // Format the current date and time using the formatter
+        String formattedDateTime = now.format(formatter);
+        user1.setRegistrationDate(formattedDateTime);
+        user1.setNextPaymentDue(formattedDateTime);
+
+        user1.setEmail("broadwaylamb13@gmail.com");
+        user1.setFirstName("Broadway");
+        user1.setIsAdmin(true);
+        user1.setLastName("Lamb");
+        user1.setPlainPassword("DevDev2024");
+        user1.setPassword(new BCryptPasswordEncoder().encode("DevDev2024"));
+        user1.setUsername("broadwaylamb13");
+        user1.setRole("SUPERADMIN");
+        user1.setSubscriptionPlan("Premium");
+        user1.setStatus("Subscribed");
+        user1.setUserType("Employers");
+        userRepository.save(user1);
     }
 }

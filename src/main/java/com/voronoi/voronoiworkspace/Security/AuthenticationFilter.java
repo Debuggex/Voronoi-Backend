@@ -130,6 +130,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             logInResponse.setIsAdmin(isUserActive.getIsAdmin());
             logInResponse.setAccessToken(accessToken);
             logInResponse.setRefreshToken(refreshToken);
+            logInResponse.setRole(isUserActive.getRole());
 
             response1.setResponseCode(1);
             response1.setResponseMessage("LogIn Successfully");
