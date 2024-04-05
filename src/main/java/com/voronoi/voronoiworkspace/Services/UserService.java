@@ -56,6 +56,12 @@ public class UserService implements UserDetailsService {
         user.setPassword(new BCryptPasswordEncoder().encode(editUser.getUser().getEmail()));
         user.setIsAdmin(editUser.getUser().getIsAdmin());
         user.setPlainPassword(editUser.getUser().getPassword());
+        user.setRole(editUser.getUser().getRole().toUpperCase());
+        if (user.getRole().equalsIgnoreCase("internal")){
+            user.setUserType("Employers");
+        }else{
+            user.setUserType("External Users");
+        }
         userRepository.save(user);
         BaseResponse response = new BaseResponse();
         response.setResponseMessage("Request Proceed Successfully");
