@@ -30,6 +30,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
@@ -53,15 +56,15 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(Long.valueOf(editUser.getUser().getId())).get();
         user.setEmail(editUser.getUser().getEmail());
         user.setFirstName(editUser.getUser().getFirstName());
-        user.setPassword(new BCryptPasswordEncoder().encode(editUser.getUser().getEmail()));
+        user.setPassword(passwordEncoder.encode(editUser.getUser().getPassword()));
         user.setIsAdmin(editUser.getUser().getIsAdmin());
         user.setPlainPassword(editUser.getUser().getPassword());
         user.setRole(editUser.getUser().getRole().toUpperCase());
-        if (user.getRole().equalsIgnoreCase("internal")){
-            user.setUserType("Employers");
-        }else{
-            user.setUserType("External Users");
-        }
+            if (user.getRole().equalsIgnoreCase("internal") || user.getRole().equalsIgnoreCase("superadmin") ){
+                user.setUserType("Employers");
+            }else{
+                user.setUserType("External Users");
+            }
         userRepository.save(user);
         BaseResponse response = new BaseResponse();
         response.setResponseMessage("Request Proceed Successfully");
@@ -103,7 +106,7 @@ public class UserService implements UserDetailsService {
         String formattedDateTime = now.format(formatter);
         user.getUser().setRegistrationDate(formattedDateTime);
         user.getUser().setNextPaymentDue(formattedDateTime);
-        user.getUser().setPassword(new BCryptPasswordEncoder().encode(user.getUser().getPassword()));
+        user.getUser().setPassword(passwordEncoder.encode(user.getUser().getPassword()));
         User saved = userRepository.save(user.getUser());
         response.setResponseCode(1);
         response.setResponseMessage("Request Proceed Successfully");
