@@ -122,7 +122,7 @@ public class GoogleDriveService {
 //uploadFile()
 
     @Transactional
-    public BaseResponse uploadFiles(MultipartFile file, String id) throws GeneralSecurityException, IOException {
+    public BaseResponse uploadFiles(MultipartFile file, String id, String fileName) throws GeneralSecurityException, IOException {
         BaseResponse response = new BaseResponse();
         if (null != file) {
             File fileMetadata = new File();
@@ -138,7 +138,7 @@ public class GoogleDriveService {
             User user = userRepository.findById(Long.valueOf(id)).get();
             Images images = new Images();
             images.setFileId(uploadFile.getId());
-            images.setName(fileMetadata.getName());
+            images.setName(fileName);
             images.setFileType(file.getContentType());
             images.setAction("Imported");
             LocalDateTime now = LocalDateTime.now();

@@ -80,8 +80,8 @@ public class AdminController {
     }
 
     @PostMapping(value = "/v1/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) throws GeneralSecurityException, IOException {
-        return new ResponseEntity<>(googleDriveService.uploadFiles(file, userId),HttpStatus.OK);
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, @RequestParam("fileName") String fileName) throws GeneralSecurityException, IOException {
+        return new ResponseEntity<>(googleDriveService.uploadFiles(file, userId, fileName),HttpStatus.OK);
     }
 
 //    @PostMapping("/v1/downloadFile")
