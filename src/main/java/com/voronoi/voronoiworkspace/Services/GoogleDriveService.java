@@ -126,7 +126,7 @@ public class GoogleDriveService {
         BaseResponse response = new BaseResponse();
         if (null != file) {
             File fileMetadata = new File();
-            fileMetadata.setName(file.getOriginalFilename());
+            fileMetadata.setName(fileName);
             File uploadFile = getInstance()
                     .files()
                     .create(fileMetadata, new InputStreamContent(
@@ -138,7 +138,7 @@ public class GoogleDriveService {
             User user = userRepository.findById(Long.valueOf(id)).get();
             Images images = new Images();
             images.setFileId(uploadFile.getId());
-            images.setName(fileName);
+            images.setName(fileMetadata.getName());
             images.setFileType(file.getContentType());
             images.setAction("Imported");
             LocalDateTime now = LocalDateTime.now();
