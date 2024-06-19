@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -80,7 +81,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "/v1/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, @RequestParam("fileName") String fileName) throws GeneralSecurityException, IOException {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId, @RequestParam("fileName") @Nullable String fileName) throws GeneralSecurityException, IOException {
         return new ResponseEntity<>(googleDriveService.uploadFiles(file, userId, fileName),HttpStatus.OK);
     }
 

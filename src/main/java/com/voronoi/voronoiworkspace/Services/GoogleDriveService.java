@@ -126,7 +126,7 @@ public class GoogleDriveService {
         BaseResponse response = new BaseResponse();
         if (null != file) {
             File fileMetadata = new File();
-            fileMetadata.setName(fileName);
+            fileMetadata.setName(Objects.isNull(fileName)?file.getOriginalFilename():fileName);
             File uploadFile = getInstance()
                     .files()
                     .create(fileMetadata, new InputStreamContent(
